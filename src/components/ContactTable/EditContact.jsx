@@ -2,8 +2,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { CiEdit } from "react-icons/ci";
+import { useContext } from "react";
+import { ContactContext } from "../../Provider/ContactsProvider";
 
 const EditContact = ({contact}) => {
+  const {setContacts} = useContext(ContactContext)
   const handleEditContact = (event, id) => {
     event.preventDefault();
     const form = event.target;
@@ -16,6 +19,7 @@ const EditContact = ({contact}) => {
       .then((data) => {
         console.log(data.data)
         if(data.data.modifiedCount>0){
+          setContacts(data.data)
           form.reset();
         document.getElementById(`${contact._id}`).close();
         toast('Contact updated successfully', {

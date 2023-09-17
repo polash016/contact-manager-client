@@ -8,24 +8,41 @@ export const ContactContext = createContext(null);
 
 const ContactsProvider = ({children}) => {
     const [contacts, setContacts] = useState([])
+    const [loading, setLoading] = useState(true);
 
-        useEffect(() => {
-            async function fetchData() {
-              try {
-                const response = await axios.get("https://contact-manager-server-seven.vercel.app/api/contacts");
-                setContacts(response.data);
-              } catch (error) {
-                console.error(error);
-              }
-            }
-        
-           return () => fetchData();
-          });
+    useEffect(() => {
+      let isMounted = true; // Track whether the component is mounted
+  
+      async function fetchData() {
+        try {
+          const response = await axios.get(
+            "https://contact-manager-server-seven.vercel.app/api/contacts"
+          );
+  
+          if (isMounted) {
+            setContacts(response.data);
+            console.log(response.data)
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+  
+      if (!contacts.length) {
+        fetchData();
+      }
+  
+      return () => {
+        isMounted = false;
+      };
+    }); 
 
 
     const authInfo = {
         contacts,
-        setContacts
+        setContacts,
+        loading
     }
     return (
         <ContactContext.Provider value={authInfo}>

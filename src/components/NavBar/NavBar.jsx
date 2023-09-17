@@ -12,8 +12,8 @@ const NavBar = () => {
     axios
       .get(`https://contact-manager-server-seven.vercel.app/api/contacts/sort/${selectedOption}`)
       .then((data) => {
-        console.log(data.data);
         setContacts(data.data);
+        console.log(data.data)
       });
   };
   const handleSearch = (e) => {

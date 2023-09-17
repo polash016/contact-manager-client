@@ -1,8 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { IoIosAdd } from "react-icons/io";
+import { useContext } from "react";
+import { ContactContext } from "../../Provider/ContactsProvider";
 
 const AddContact = () => {
+  const {setContacts} = useContext(ContactContext)
     const handleAddContact = e => {
         e.preventDefault();
         const form = e.target;
@@ -14,6 +17,7 @@ const AddContact = () => {
         axios.post('https://contact-manager-server-seven.vercel.app/api/contacts', data)
         .then(data => {
          if(data.data.insertedId){
+          setContacts(data.data)
           form.reset()
           document.getElementById('my_modal_3').close();
           toast('Contact Added Successfully', {
